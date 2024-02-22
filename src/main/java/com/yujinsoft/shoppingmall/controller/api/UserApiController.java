@@ -20,11 +20,11 @@ public class UserApiController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping("/auth/joinProc")
+   /* @PostMapping("/auth/joinProc")
     public ResponseDto<Integer> register(@ModelAttribute("userRegister") UserRegister userRegister){
         log.debug("@@@@@@@@@@@@ userRegister :{}",userRegister.toString());
         User user = User.createUser(userRegister,passwordEncoder);
         userService.register(user);
         return new ResponseDto<Integer>(HttpStatus.OK.value(),1);
-    }
+    }*/
 }
