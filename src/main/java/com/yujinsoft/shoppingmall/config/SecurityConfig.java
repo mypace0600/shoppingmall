@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -43,6 +42,7 @@ public class SecurityConfig {
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/","/auth/**","/js/**","/css/**","/img/**","/thymeleaf/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login->login
@@ -56,7 +56,10 @@ public class SecurityConfig {
                 .logout(logout->logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
                         .logoutSuccessUrl("/")
-                );
+                )
+                .exceptionHandling(exceptionHandling->exceptionHandling
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
+        ;
 
         return http.build();
     }

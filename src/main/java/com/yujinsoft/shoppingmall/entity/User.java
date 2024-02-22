@@ -56,7 +56,7 @@ public class User {
                 .phone(userRegister.getPhone())
                 .address(userRegister.getAddress())
                 .password(passwordEncoder.encode(userRegister.getPassword()))
-                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
 
         return user;
