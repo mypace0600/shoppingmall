@@ -48,8 +48,14 @@ public class SecurityConfig {
                 .formLogin(login->login
                         .loginPage("/auth/loginForm")
                         .loginProcessingUrl("/auth/loginProc")
+                        .usernameParameter("email")
+                        .failureUrl("/auth/login/error")
                         .defaultSuccessUrl("/")
                         .permitAll()
+                )
+                .logout(logout->logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+                        .logoutSuccessUrl("/")
                 );
 
         return http.build();

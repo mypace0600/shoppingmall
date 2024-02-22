@@ -1,15 +1,10 @@
 package com.yujinsoft.shoppingmall.service;
 
-import com.yujinsoft.shoppingmall.contract.UserRegister;
-import com.yujinsoft.shoppingmall.entity.Role;
 import com.yujinsoft.shoppingmall.entity.User;
 import com.yujinsoft.shoppingmall.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional
