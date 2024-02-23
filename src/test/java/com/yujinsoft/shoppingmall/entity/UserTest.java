@@ -1,6 +1,6 @@
 package com.yujinsoft.shoppingmall.entity;
 
-import com.yujinsoft.shoppingmall.contract.UserRegister;
+import com.yujinsoft.shoppingmall.contract.UserRegisterRequest;
 import com.yujinsoft.shoppingmall.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -33,14 +31,14 @@ class UserTest {
     @WithMockUser(username = "test", roles = "USER")
     public void auditingTest(){
 
-        UserRegister userRegister = new UserRegister();
-        userRegister.setUsername("test");
-        userRegister.setEmail("test@test.com");
-        userRegister.setPhone("010-0000-0000");
-        userRegister.setPassword("12341234");
-        userRegister.setAddress("test address");
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setUsername("test");
+        userRegisterRequest.setEmail("test@test.com");
+        userRegisterRequest.setPhone("010-0000-0000");
+        userRegisterRequest.setPassword("12341234");
+        userRegisterRequest.setAddress("test address");
 
-        User user = User.createUser(userRegister,passwordEncoder);
+        User user = User.createUser(userRegisterRequest,passwordEncoder);
         userRepository.save(user);
 
         em.flush();

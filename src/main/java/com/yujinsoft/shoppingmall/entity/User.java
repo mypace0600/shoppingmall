@@ -1,13 +1,10 @@
 package com.yujinsoft.shoppingmall.entity;
 
-import com.yujinsoft.shoppingmall.contract.UserRegister;
+import com.yujinsoft.shoppingmall.contract.UserRegisterRequest;
 import com.yujinsoft.shoppingmall.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.LocalDateTime;
 
 @Getter @Setter
 @Builder
@@ -42,13 +39,13 @@ public class User extends BaseEntity{
 
     private String oauth;
 
-    public static User createUser(UserRegister userRegister, PasswordEncoder passwordEncoder){
+    public static User createUser(UserRegisterRequest userRegisterRequest, PasswordEncoder passwordEncoder){
         User user = User.builder()
-                .username(userRegister.getUsername())
-                .email(userRegister.getEmail())
-                .phone(userRegister.getPhone())
-                .address(userRegister.getAddress())
-                .password(passwordEncoder.encode(userRegister.getPassword()))
+                .username(userRegisterRequest.getUsername())
+                .email(userRegisterRequest.getEmail())
+                .phone(userRegisterRequest.getPhone())
+                .address(userRegisterRequest.getAddress())
+                .password(passwordEncoder.encode(userRegisterRequest.getPassword()))
                 .role(Role.ADMIN)
                 .build();
 

@@ -1,6 +1,6 @@
 package com.yujinsoft.shoppingmall.controller;
 
-import com.yujinsoft.shoppingmall.contract.UserRegister;
+import com.yujinsoft.shoppingmall.contract.UserRegisterRequest;
 import com.yujinsoft.shoppingmall.entity.User;
 import com.yujinsoft.shoppingmall.service.UserService;
 import jakarta.validation.Valid;
@@ -23,17 +23,17 @@ public class UserController {
     @GetMapping("/auth/joinForm")
     public String joinForm(Model model)
     {
-        model.addAttribute("userRegister",new UserRegister());
+        model.addAttribute("userRegister",new UserRegisterRequest());
         return "user/joinForm";
     }
 
     @PostMapping("/auth/joinProc")
-    public String register(@Valid @ModelAttribute("userRegister") UserRegister userRegister, BindingResult bindingResult, Model model){
+    public String register(@Valid @ModelAttribute("userRegister") UserRegisterRequest userRegisterRequest, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             return "auth/joinForm";
         }
         try {
-            User user = User.createUser(userRegister, passwordEncoder);
+            User user = User.createUser(userRegisterRequest, passwordEncoder);
             userService.register(user);
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage",e.getMessage());

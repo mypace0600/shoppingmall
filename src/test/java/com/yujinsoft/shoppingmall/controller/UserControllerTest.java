@@ -1,7 +1,6 @@
 package com.yujinsoft.shoppingmall.controller;
 
-import com.yujinsoft.shoppingmall.contract.UserLoginRequest;
-import com.yujinsoft.shoppingmall.contract.UserRegister;
+import com.yujinsoft.shoppingmall.contract.UserRegisterRequest;
 import com.yujinsoft.shoppingmall.entity.User;
 import com.yujinsoft.shoppingmall.service.UserService;
 import jakarta.transaction.Transactional;
@@ -16,7 +15,6 @@ import org.springframework.security.test.web.servlet.response.SecurityMockMvcRes
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 
 @RunWith(SpringRunner.class)
@@ -35,13 +33,13 @@ class UserControllerTest {
     PasswordEncoder passwordEncoder;
 
     public User createUser(String email, String password){
-        UserRegister userRegister = new UserRegister();
-        userRegister.setEmail(email);
-        userRegister.setUsername("loginTest");
-        userRegister.setPassword(password);
-        userRegister.setPhone("010-0000-0000");
-        userRegister.setAddress("test address");
-        User user = User.createUser(userRegister, passwordEncoder);
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setEmail(email);
+        userRegisterRequest.setUsername("loginTest");
+        userRegisterRequest.setPassword(password);
+        userRegisterRequest.setPhone("010-0000-0000");
+        userRegisterRequest.setAddress("test address");
+        User user = User.createUser(userRegisterRequest, passwordEncoder);
         return userService.register(user);
     }
 

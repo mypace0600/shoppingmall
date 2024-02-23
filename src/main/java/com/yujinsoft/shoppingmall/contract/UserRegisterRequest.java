@@ -7,7 +7,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-public class UserRegister {
+public class UserRegisterRequest {
 
     @NotBlank(message = "유저명은 필수 입력 값입니다.")
     private String username;

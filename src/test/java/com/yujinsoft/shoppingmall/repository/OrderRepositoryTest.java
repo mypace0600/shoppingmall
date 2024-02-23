@@ -1,6 +1,6 @@
 package com.yujinsoft.shoppingmall.repository;
 
-import com.yujinsoft.shoppingmall.contract.UserRegister;
+import com.yujinsoft.shoppingmall.contract.UserRegisterRequest;
 import com.yujinsoft.shoppingmall.entity.Item;
 import com.yujinsoft.shoppingmall.entity.Order;
 import com.yujinsoft.shoppingmall.entity.OrderItem;
@@ -93,14 +93,14 @@ class OrderRepositoryTest {
             order.getOrderItems().add(orderItem);
         }
 
-        UserRegister userRegister = new UserRegister();
-        userRegister.setEmail("test@test.com");
-        userRegister.setUsername("test");
-        userRegister.setPassword("12341234");
-        userRegister.setPhone("010-0000-0000");
-        userRegister.setAddress("test address");
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setEmail("test@test.com");
+        userRegisterRequest.setUsername("test");
+        userRegisterRequest.setPassword("12341234");
+        userRegisterRequest.setPhone("010-0000-0000");
+        userRegisterRequest.setAddress("test address");
 
-        User user = User.createUser(userRegister,passwordEncoder);
+        User user = User.createUser(userRegisterRequest,passwordEncoder);
         userRepository.save(user);
         order.setUser(user);
         orderRepository.save(order);

@@ -1,6 +1,6 @@
 package com.yujinsoft.shoppingmall.repository;
 
-import com.yujinsoft.shoppingmall.contract.UserRegister;
+import com.yujinsoft.shoppingmall.contract.UserRegisterRequest;
 import com.yujinsoft.shoppingmall.entity.Cart;
 import com.yujinsoft.shoppingmall.entity.User;
 import jakarta.persistence.EntityManager;
@@ -32,13 +32,13 @@ class CartRepositoryTest {
     EntityManager em;
 
     public User createUserForTest(){
-        UserRegister userRegister = new UserRegister();
-        userRegister.setEmail("test@test.com");
-        userRegister.setUsername("test");
-        userRegister.setPhone("010-0000-0000");
-        userRegister.setPassword("12341234");
-        userRegister.setAddress("test address");
-        return User.createUser(userRegister,passwordEncoder);
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setEmail("test@test.com");
+        userRegisterRequest.setUsername("test");
+        userRegisterRequest.setPhone("010-0000-0000");
+        userRegisterRequest.setPassword("12341234");
+        userRegisterRequest.setAddress("test address");
+        return User.createUser(userRegisterRequest,passwordEncoder);
     }
 
     @Test

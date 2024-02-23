@@ -4,8 +4,6 @@ import com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @ToString

@@ -1,6 +1,6 @@
 package com.yujinsoft.shoppingmall.service;
 
-import com.yujinsoft.shoppingmall.contract.UserRegister;
+import com.yujinsoft.shoppingmall.contract.UserRegisterRequest;
 import com.yujinsoft.shoppingmall.entity.User;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -23,14 +23,14 @@ class UserServiceTest {
 
     public User createUser(){
 
-        UserRegister userRegister = new UserRegister();
-        userRegister.setUsername("test");
-        userRegister.setPassword("1234");
-        userRegister.setEmail("test@test.com");
-        userRegister.setPhone("010-1234-5678");
-        userRegister.setAddress("test address");
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setUsername("test");
+        userRegisterRequest.setPassword("1234");
+        userRegisterRequest.setEmail("test@test.com");
+        userRegisterRequest.setPhone("010-1234-5678");
+        userRegisterRequest.setAddress("test address");
 
-        return User.createUser(userRegister, passwordEncoder);
+        return User.createUser(userRegisterRequest, passwordEncoder);
     }
 
     @Test
