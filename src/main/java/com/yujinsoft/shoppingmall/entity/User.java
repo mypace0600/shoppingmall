@@ -1,6 +1,7 @@
 package com.yujinsoft.shoppingmall.entity;
 
 import com.yujinsoft.shoppingmall.contract.UserRegister;
+import com.yujinsoft.shoppingmall.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
+    @Column(name = "user_id")
     @GeneratedValue
     private Long id;
 

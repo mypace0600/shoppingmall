@@ -1,5 +1,6 @@
 package com.yujinsoft.shoppingmall.entity;
 
+import com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

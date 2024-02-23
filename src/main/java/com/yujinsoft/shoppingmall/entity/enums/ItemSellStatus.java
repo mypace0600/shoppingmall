@@ -1,4 +1,4 @@
-package com.yujinsoft.shoppingmall.entity;
+package com.yujinsoft.shoppingmall.entity.enums;
 
 public enum ItemSellStatus {
     SELL, SOLD_OUT
