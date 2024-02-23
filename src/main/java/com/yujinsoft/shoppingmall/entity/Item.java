@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class Item {
 
     @Id
+    @Column(name = "item_id")
     @GeneratedValue
     private Long id;
 
