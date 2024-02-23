@@ -8,14 +8,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter @Setter
 @Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Order extends BaseEntity{
 
     @Id
     @Column(name = "order_id")
@@ -34,7 +34,4 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    private LocalDateTime regDt;
-
-    private LocalDateTime updateDt;
 }

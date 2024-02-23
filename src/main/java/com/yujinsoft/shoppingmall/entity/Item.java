@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Item {
+public class Item extends BaseEntity{
 
     @Id
     @Column(name = "item_id")
@@ -34,9 +34,4 @@ public class Item {
 
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
-
-    private LocalDateTime regDt;
-
-    private LocalDateTime updateDt;
-
 }

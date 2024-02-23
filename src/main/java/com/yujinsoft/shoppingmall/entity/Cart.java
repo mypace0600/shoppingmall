@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Cart {
+public class Cart extends BaseEntity{
 
     @Id
     @Column(name = "cart_id")

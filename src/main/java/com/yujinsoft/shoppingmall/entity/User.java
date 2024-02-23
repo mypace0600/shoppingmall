@@ -3,22 +3,19 @@ package com.yujinsoft.shoppingmall.entity;
 import com.yujinsoft.shoppingmall.contract.UserRegister;
 import com.yujinsoft.shoppingmall.entity.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "t_user")
-public class User {
+public class User extends BaseEntity{
 
     @Id
     @Column(name = "user_id")
@@ -42,12 +39,6 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @CreationTimestamp
-    private LocalDateTime regDt;
-
-    @CreationTimestamp
-    private LocalDateTime updateDt;
 
     private String oauth;
 

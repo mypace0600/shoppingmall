@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class OrderItem {
+public class OrderItem extends BaseEntity{
 
     @Id
     @Column(name="order_item_id")
@@ -30,7 +30,4 @@ public class OrderItem {
 
     private int count;
 
-    private LocalDateTime regDt;
-
-    private LocalDateTime updateDt;
 }

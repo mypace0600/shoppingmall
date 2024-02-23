@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class CartItem {
+public class CartItem extends BaseEntity{
 
     @Id
     @GeneratedValue
