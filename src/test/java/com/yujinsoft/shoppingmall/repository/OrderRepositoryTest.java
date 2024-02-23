@@ -36,6 +36,9 @@ class OrderRepositoryTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    OrderItemRepository orderItemRepository;
+
     @PersistenceContext
     EntityManager em;
 
@@ -110,6 +113,23 @@ class OrderRepositoryTest {
         Order order = this.createOrderForTest();
         order.getOrderItems().remove(0);
         em.flush();
+    }
+
+    @Test
+    @DisplayName("지연 로딩 테스트")
+    public void lazyLoadingTest(){
+        Order order = this.createOrderForTest();
+        Long orderItemId = order.getOrderItems().get(0).getId();
+        em.flush();
+        em.clear();
+
+        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        System.out.println("Order class : " + orderItem.getOrder().getClass());
+        System.out.println("================================");
+        orderItem.getOrder().getOrderDt();
+        System.out.println("================================");
     }
 
 
