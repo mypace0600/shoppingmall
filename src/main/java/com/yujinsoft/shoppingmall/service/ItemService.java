@@ -6,12 +6,14 @@ import com.yujinsoft.shoppingmall.entity.ItemImg;
 import com.yujinsoft.shoppingmall.repository.ItemImgRepository;
 import com.yujinsoft.shoppingmall.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -19,7 +21,6 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ItemImgService itemImgService;
-    private final ItemImgRepository itemImgRepository;
 
     public Long saveItem(ItemRegisterRequest itemRegisterRequest, List<MultipartFile> itemImgFileList) throws Exception {
         Item item = itemRegisterRequest.createItem();
@@ -33,7 +34,9 @@ public class ItemService {
             } else {
                 itemImg.setRepImgYn("N");
             }
-            itemImgService.saveItemImg(itemImg,itemImgFileList.get(i));
+            if(!"application/octet-stream".equals(itemImgFileList.get(i).getContentType())) {
+                itemImgService.saveItemImg(itemImg, itemImgFileList.get(i));
+            }
         }
 
         return item.getId();
