@@ -69,6 +69,7 @@ public class ItemService {
         Item item = itemRepository.findById(itemRegisterRequest.getId())
                 .orElseThrow(EntityNotFoundException::new);
         item.updateItem(itemRegisterRequest);
+
         List<Long> itemImgIdList = itemRegisterRequest.getItemImgIdList();
         for(int i=0;i<itemImgFileList.size();i++){
             itemImgService.updateItemImg(itemImgIdList.get(i), itemImgFileList.get(i));

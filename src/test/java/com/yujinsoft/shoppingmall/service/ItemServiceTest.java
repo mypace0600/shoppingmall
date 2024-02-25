@@ -1,11 +1,13 @@
 package com.yujinsoft.shoppingmall.service;
 
+import com.yujinsoft.shoppingmall.contract.ItemImgRequest;
 import com.yujinsoft.shoppingmall.contract.ItemRegisterRequest;
 import com.yujinsoft.shoppingmall.entity.Item;
 import com.yujinsoft.shoppingmall.entity.ItemImg;
 import com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus;
 import com.yujinsoft.shoppingmall.repository.ItemImgRepository;
 import com.yujinsoft.shoppingmall.repository.ItemRepository;
+import groovy.util.logging.Slf4j;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -103,12 +105,26 @@ class ItemServiceTest {
 
         List<MultipartFile> multipartFileList = createMultipartFiles();
         Long itemId = itemService.saveItem(itemRegisterRequest,multipartFileList);
+        List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
+        List<ItemImgRequest> itemImgRequestList = new ArrayList<>();
+        List<Long> itemImgIdList = new ArrayList<>();
+        for(ItemImg i : itemImgList){
+            ItemImgRequest itemImgRequest = ItemImgRequest.of(i);
+            itemImgRequestList.add(itemImgRequest);
+            itemImgIdList.add(i.getId());
+        }
+        ItemRegisterRequest savedItem = itemService.getItemDetail(itemId);
+        savedItem.setItemImgRequestList(itemImgRequestList);
+        savedItem.setItemImgIdList(itemImgIdList);
+        savedItem.setItemNm("test edit");
 
-        Item savedItem = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
 
+        List<MultipartFile> updatedMultipartFileList = createMultipartFiles();
+        Long updatedItemId = itemService.updateItem(savedItem,updatedMultipartFileList);
 
+        Item updatedItem = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
 
-
+        assertEquals(updatedItem.getItemNm(), savedItem.getItemNm());
     }
 
 
