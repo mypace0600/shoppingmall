@@ -23,12 +23,12 @@ public class UserController {
     @GetMapping("/auth/joinForm")
     public String joinForm(Model model)
     {
-        model.addAttribute("userRegister",new UserRegisterRequest());
+        model.addAttribute("userRegisterRequest",new UserRegisterRequest());
         return "user/joinForm";
     }
 
     @PostMapping("/auth/joinProc")
-    public String register(@Valid @ModelAttribute("userRegister") UserRegisterRequest userRegisterRequest, BindingResult bindingResult, Model model){
+    public String register(@Valid @ModelAttribute("userRegisterRequest") UserRegisterRequest userRegisterRequest, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             return "auth/joinForm";
         }

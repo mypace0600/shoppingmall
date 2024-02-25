@@ -30,7 +30,16 @@ spring:
       ddl-auto: create
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
+
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type: TRACE
+
+itemImgLocation: /Users/hyunsu/Desktop
+uploadPath: file:///Users/hyunsu/Desktop

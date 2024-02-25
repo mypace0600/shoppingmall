@@ -49,8 +49,6 @@ class OrderRepositoryTest {
         item.setPrice(10000);
         item.setItemSellStatus(ItemSellStatus.SELL);
         item.setStockNumber(100);
-        item.setRegDt(LocalDateTime.now());
-        item.setUpdateDt(LocalDateTime.now());
         return item;
     }
 
