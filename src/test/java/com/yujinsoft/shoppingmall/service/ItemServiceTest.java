@@ -48,7 +48,7 @@ class ItemServiceTest {
     @Test
     @DisplayName("상품 등록 테스트")
     @WithMockUser(username = "admin",roles = "ADMIN")
-    void saveItem() throws Exception {
+    void saveItemTest() throws Exception {
         ItemRegisterRequest itemRegisterRequest = new ItemRegisterRequest();
         itemRegisterRequest.setItemNm("test");
         itemRegisterRequest.setItemSellStatus(ItemSellStatus.SELL);
@@ -69,4 +69,47 @@ class ItemServiceTest {
         assertEquals(itemRegisterRequest.getStockNumber(), item.getStockNumber());
         assertEquals(multipartFileList.get(0).getOriginalFilename(), itemImgList.get(0).getOriImgName());
     }
+
+    @Test
+    @DisplayName("상품 조회 테스트")
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void getItemDetailTest() throws Exception {
+
+        ItemRegisterRequest itemRegisterRequest = new ItemRegisterRequest();
+        itemRegisterRequest.setItemNm("test");
+        itemRegisterRequest.setItemSellStatus(ItemSellStatus.SELL);
+        itemRegisterRequest.setItemDetail("test item");
+        itemRegisterRequest.setPrice(10000);
+        itemRegisterRequest.setStockNumber(100);
+
+        List<MultipartFile> multipartFileList = createMultipartFiles();
+        Long itemId = itemService.saveItem(itemRegisterRequest,multipartFileList);
+
+        ItemRegisterRequest savedItemDetail = itemService.getItemDetail(itemId);
+        assertEquals(savedItemDetail.getItemNm(),itemRegisterRequest.getItemNm());
+        assertEquals(savedItemDetail.getItemImgIdList(),itemRegisterRequest.getItemImgIdList());
+    }
+
+    @Test
+    @DisplayName("상품 수정 테스트")
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void updateItemTest() throws Exception {
+        ItemRegisterRequest itemRegisterRequest = new ItemRegisterRequest();
+        itemRegisterRequest.setItemNm("test");
+        itemRegisterRequest.setItemSellStatus(ItemSellStatus.SELL);
+        itemRegisterRequest.setItemDetail("test item");
+        itemRegisterRequest.setPrice(10000);
+        itemRegisterRequest.setStockNumber(100);
+
+        List<MultipartFile> multipartFileList = createMultipartFiles();
+        Long itemId = itemService.saveItem(itemRegisterRequest,multipartFileList);
+
+        Item savedItem = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+
+
+
+
+    }
+
+
 }

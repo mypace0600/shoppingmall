@@ -1,5 +1,6 @@
 package com.yujinsoft.shoppingmall.entity;
 
+import com.yujinsoft.shoppingmall.contract.ItemRegisterRequest;
 import com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,4 +33,12 @@ public class Item extends BaseEntity{
 
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
+
+    public void updateItem(ItemRegisterRequest itemRegisterRequest){
+        this.itemNm = itemRegisterRequest.getItemNm();
+        this.price = itemRegisterRequest.getPrice();
+        this.itemDetail = itemRegisterRequest.getItemDetail();
+        this.stockNumber = itemRegisterRequest.getStockNumber();
+        this.itemSellStatus = itemRegisterRequest.getItemSellStatus();
+    }
 }
