@@ -65,17 +65,11 @@ public class ItemService {
         return itemRegisterRequest;
     }
 
-    @Transactional
     public Long updateItem(ItemRegisterRequest itemRegisterRequest, List<MultipartFile> itemImgFileList) throws Exception {
         Item item = itemRepository.findById(itemRegisterRequest.getId())
                 .orElseThrow(EntityNotFoundException::new);
         item.updateItem(itemRegisterRequest);
-        List<Long> itemImgIdList = itemRegisterRequest.getItemImgIdList();
-        if(itemImgIdList.size()>0){
-            for(int i=0;i<itemImgFileList.size();i++){
-                itemImgService.updateItemImg(itemImgIdList.get(i), itemImgFileList.get(i));
-            }
-        }
+        itemImgService.updateItemImg(itemRegisterRequest.getId(), itemImgFileList);
         return item.getId();
     }
  }

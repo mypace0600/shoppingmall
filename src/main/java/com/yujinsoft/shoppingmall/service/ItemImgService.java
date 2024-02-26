@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,18 +44,26 @@ public class ItemImgService {
         return itemImgRepository.findByItemIdOrderByIdAsc(itemId);
     }
 
-    public void updateItemImg(Long itemImgId, MultipartFile itemImgFile) throws Exception {
-        if(!itemImgFile.isEmpty()){
-            ItemImg savedItemImg = itemImgRepository.findById(itemImgId)
-                    .orElseThrow(EntityNotFoundException::new);
-            if(!StringUtils.isEmpty(savedItemImg.getImgName())){
-                fileService.deleteFile(itemImgLocation+"/"+savedItemImg.getImgName());
-            }
+    public void updateItemImg(Long itemId, List<MultipartFile> itemImgFileList) throws Exception {
+        List<ItemImg> savedItemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
+        List<Long> savedItemImgIdList = savedItemImgList.stream().map(ItemImg::getId).collect(Collectors.toList());
 
-            String oriImgName = itemImgFile.getOriginalFilename();
-            String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
-            String imgUrl = "/images/item/"+imgName;
-            savedItemImg.updateItemImg(oriImgName,imgName,imgUrl);
+        if(!itemImgFileList.isEmpty()) {
+            int index = 0;
+            for (Long savedItemImgId : savedItemImgIdList) {
+                ItemImg savedItemImg = itemImgRepository.findById(savedItemImgId)
+                        .orElseThrow(EntityNotFoundException::new);
+
+                if (!StringUtils.isEmpty(savedItemImg.getImgName())) {
+                    fileService.deleteFile(itemImgLocation + "/" + savedItemImg.getImgName());
+                }
+
+                String oriImgName = itemImgFileList.get(index).getOriginalFilename();
+                String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFileList.get(index).getBytes());
+                String imgUrl = "/images/item/" + imgName;
+                savedItemImg.updateItemImg(oriImgName, imgName, imgUrl);
+                index++;
+            }
         }
     }
 }
