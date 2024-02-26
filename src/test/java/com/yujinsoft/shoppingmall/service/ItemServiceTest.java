@@ -105,17 +105,8 @@ class ItemServiceTest {
 
         List<MultipartFile> multipartFileList = createMultipartFiles();
         Long itemId = itemService.saveItem(itemRegisterRequest,multipartFileList);
-        List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
-        List<ItemImgRequest> itemImgRequestList = new ArrayList<>();
-        List<Long> itemImgIdList = new ArrayList<>();
-        for(ItemImg i : itemImgList){
-            ItemImgRequest itemImgRequest = ItemImgRequest.of(i);
-            itemImgRequestList.add(itemImgRequest);
-            itemImgIdList.add(i.getId());
-        }
+
         ItemRegisterRequest savedItem = itemService.getItemDetail(itemId);
-        savedItem.setItemImgRequestList(itemImgRequestList);
-        savedItem.setItemImgIdList(itemImgIdList);
         savedItem.setItemNm("test edit");
 
 

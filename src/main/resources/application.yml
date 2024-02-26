@@ -40,6 +40,7 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type: TRACE
+    org.springframework: DEBUG
 
 itemImgLocation: /Users/hyunsu/Desktop
 uploadPath: file:///Users/hyunsu/Desktop

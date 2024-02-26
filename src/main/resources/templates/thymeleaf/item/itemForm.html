@@ -48,7 +48,7 @@
 </th:block>
 
 <div layout:fragment="content">
-    <form th:object="${itemRegisterRequest}" enctype="multipart/form-data" method="post" role="form">
+    <form th:object="${itemRegisterRequest}" enctype="multipart/form-data" method="post" role="form" action="#">
         <p class="h2">
             상품 등록
         </p>
@@ -105,7 +105,7 @@
             <div class="form-group" th:each="itemRegisterRequest, status: ${itemRegisterRequest.itemImgRequestList}">
                 <div class="custom-file img-div">
                     <input type="file" class="custom-file-input" name="itemImgFile">
-                    <input type="hidden" name="itemImgIds" th:value="${itemRegisterRequest.id}">
+                    <input type="hidden" name="itemImgIdList" th:value="${itemRegisterRequest.id}">
                     <label class="custom-file-label" th:text="${not #strings.isEmpty(itemRegisterRequest.oriImgName)} ? ${itemRegisterRequest.oriImgName} : '상품이미지' + ${status.index+1}"></label>
                 </div>
             </div>

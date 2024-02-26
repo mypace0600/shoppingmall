@@ -2,9 +2,11 @@ package com.yujinsoft.shoppingmall.controller;
 
 import com.yujinsoft.shoppingmall.contract.ItemRegisterRequest;
 import com.yujinsoft.shoppingmall.service.ItemService;
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class ItemController {
@@ -63,7 +66,12 @@ public class ItemController {
     }
 
     @PostMapping("/admin/item/{itemId}")
-    public String itemUpdate(@Valid ItemRegisterRequest itemRegisterRequest, BindingResult bindingResult, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList, Model model){
+    public String itemUpdate(
+            @Valid ItemRegisterRequest itemRegisterRequest,
+            BindingResult bindingResult,
+            @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
+            Model model
+    ){
         if(bindingResult.hasErrors()){
             return "item/itemForm";
         }
