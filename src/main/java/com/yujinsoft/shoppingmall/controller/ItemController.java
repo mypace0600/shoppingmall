@@ -1,12 +1,18 @@
 package com.yujinsoft.shoppingmall.controller;
 
 import com.yujinsoft.shoppingmall.contract.ItemRegisterRequest;
+import com.yujinsoft.shoppingmall.contract.ItemSearchRequest;
+import com.yujinsoft.shoppingmall.entity.Item;
 import com.yujinsoft.shoppingmall.service.ItemService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -89,4 +95,12 @@ public class ItemController {
         }
         return "redirect:/";
     }
+
+    @GetMapping("/admin/items")
+    public String itemManage(ItemSearchRequest itemSearchRequest, Model model, @PageableDefault(size=3, sort="id", direction = Sort.Direction.DESC) Pageable pageable){
+        Page<Item> items = itemService.getAdminItems(pageable);
+        model.addAttribute("items",items);
+        return "item/itemManage";
+    }
+
 }

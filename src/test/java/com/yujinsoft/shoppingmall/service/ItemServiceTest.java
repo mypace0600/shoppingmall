@@ -12,6 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
@@ -140,6 +142,38 @@ class ItemServiceTest {
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@@ updatedItemImgList.get(0).getOriImgName() : "+updatedItemImgList.get(0).getOriImgName() );
 
         assertEquals(updatedItemImgList.get(0).getOriImgName(), multipartFileListSecond.get(0).getOriginalFilename());
+
+    }
+
+    public Item createItemForTest(){
+        ItemRegisterRequest itemRegisterRequest = new ItemRegisterRequest();
+        itemRegisterRequest.setItemNm("test");
+        itemRegisterRequest.setItemSellStatus(ItemSellStatus.SELL);
+        itemRegisterRequest.setItemDetail("test item");
+        itemRegisterRequest.setPrice(10000);
+        itemRegisterRequest.setStockNumber(100);
+        Item item = itemRegisterRequest.createItem();
+        return item;
+    }
+
+    @Test
+    @DisplayName("상품 조회 페이징 테스트")
+    void getAdminItems(){
+        List<Item> savedItemList = new ArrayList<>();
+        for(int i=0;i<5;i++){
+            Item item = createItemForTest();
+            itemRepository.save(item);
+            savedItemList.add(item);
+        }
+
+        Pageable p = Pageable.ofSize(3);
+
+        Page<Item> items = itemService.getAdminItems(p);
+
+        assertEquals(items.getContent().get(0).getId(), savedItemList.get(0).getId());
+        assertEquals(items.getContent().get(1).getId(), savedItemList.get(1).getId());
+        assertEquals(items.getContent().get(2).getId(), savedItemList.get(2).getId());
+        assertEquals(items.getTotalPages(), 2 );
 
     }
 

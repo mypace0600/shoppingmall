@@ -9,6 +9,8 @@ import com.yujinsoft.shoppingmall.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,4 +74,9 @@ public class ItemService {
         itemImgService.updateItemImg(itemRegisterRequest.getId(), itemImgFileList);
         return item.getId();
     }
- }
+
+    @Transactional(readOnly = true)
+    public Page<Item> getAdminItems(Pageable pageable) {
+        return itemRepository.findAll(pageable);
+    }
+}
