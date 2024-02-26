@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/laout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}"
 >
 
@@ -11,11 +11,55 @@
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
+    <script th:inline="javascript">
 
     </script>
 </th:block>
 
 <div layout:fragment="content">
     <h1>상품 관리 페이지 입니다.</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <td>상품아이디</td>
+                <td>상품명</td>
+                <td>상태</td>
+                <td>등록자</td>
+                <td>등록일</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item, status:${items.getContent()}">
+                <td th:text="${item.id}"></td>
+                <td><a th:href="@{'/admin/item/' + ${item.id}}" th:text="${item.itemNm}"></a></td>
+                <td th:text="${item.itemSellStatus == T(com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>
+                <td th:text="${item.createdBy}"></td>
+                <td th:text="${item.regTime}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <ul class="pagination" th:with="
+        pageNumber = ${items.pageable.pageNumber},
+        pageSize = ${items.pageable.pageSize},
+        totalPages = ${items.totalPages},
+        startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+        tempEndPage = ${startPage + pageSize - 1},
+        endPage = ${tempEndPage < totalPages ? tempEndPage : totalPages}
+    ">
+        <li th:classappend="${pageNumber == 0}? 'disabled'" class="page-item">
+            <a class="page-link" th:href="${pageNumber == 0} ? '#' : @{/(page=${pageNumber-1})}">
+                <span aria-hidden="true">&lt;</span>
+            </a>
+        </li>
+        <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber+1} ? 'active'" class="page-item">
+            <a th:text="${page}" class="page-link" th:href="@{/(page=${page-1})}"></a>
+        </li>
+        <li th:classappend="${pageNumber == endPage} ? 'disabled'" class="page-item">
+            <a class="page-link" th:href="${pageNumber == endPage} ? '#' : @{/page=${pageNumber+1}}" aria-label="Next">
+                <span aria-hidden="true">&gt;</span>
+            </a>
+        </li>
+    </ul>
 </div>
 </html>
