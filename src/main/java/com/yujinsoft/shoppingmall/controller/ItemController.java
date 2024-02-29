@@ -75,17 +75,18 @@ public class ItemController {
     public String itemUpdate(
             @Valid ItemRegisterRequest itemRegisterRequest,
             BindingResult bindingResult,
-            @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
+            @RequestParam(value="itemImgFile", required = false) List<MultipartFile> itemImgFileList,
             Model model
     ){
+
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@ : "+itemRegisterRequest.toString());
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@ : "+bindingResult.toString());
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@ : "+itemImgFileList.get(0).isEmpty());
+
         if(bindingResult.hasErrors()){
             return "item/itemForm";
         }
 
-        if(itemImgFileList.get(0).isEmpty() && itemRegisterRequest.getId() == null) {
-            model.addAttribute("errorMessage","첫번째 상품 이미지는 필수 입력값입니다.");
-            return "item/itemForm";
-        }
 
         try {
             itemService.updateItem(itemRegisterRequest, itemImgFileList);

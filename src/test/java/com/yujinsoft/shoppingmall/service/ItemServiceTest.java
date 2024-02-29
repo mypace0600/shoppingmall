@@ -174,7 +174,6 @@ class ItemServiceTest {
         assertEquals(items.getContent().get(1).getId(), savedItemList.get(1).getId());
         assertEquals(items.getContent().get(2).getId(), savedItemList.get(2).getId());
         assertEquals(items.getTotalPages(), 2 );
-
     }
 
 

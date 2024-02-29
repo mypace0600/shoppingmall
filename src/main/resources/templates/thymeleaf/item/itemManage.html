@@ -30,7 +30,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="item, status:${items.getContent()}">
+            <tr th:if="${items.isEmpty()}">
+                <td colspan="5">등록된 상품이 없습니다.</td>
+            </tr>
+            <tr th:unless="${items.isEmpty()}"
+                th:each="item, status:${items.getContent()}">
                 <td th:text="${item.id}"></td>
                 <td><a th:href="@{'/admin/item/' + ${item.id}}" th:text="${item.itemNm}"></a></td>
                 <td th:text="${item.itemSellStatus == T(com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>
@@ -39,7 +43,8 @@
             </tr>
         </tbody>
     </table>
-    <ul class="pagination" th:with="
+    <ul th:unless="${items.isEmpty()}"
+        class="pagination" th:with="
         pageNumber = ${items.pageable.pageNumber},
         pageSize = ${items.pageable.pageSize},
         totalPages = ${items.totalPages},

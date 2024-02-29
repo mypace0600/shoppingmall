@@ -71,7 +71,9 @@ public class ItemService {
         Item item = itemRepository.findById(itemRegisterRequest.getId())
                 .orElseThrow(EntityNotFoundException::new);
         item.updateItem(itemRegisterRequest);
-        itemImgService.updateItemImg(itemRegisterRequest.getId(), itemImgFileList);
+        if(!itemImgFileList.get(0).isEmpty()) {
+            itemImgService.updateItemImg(itemRegisterRequest.getId(), itemImgFileList);
+        }
         return item.getId();
     }
 
