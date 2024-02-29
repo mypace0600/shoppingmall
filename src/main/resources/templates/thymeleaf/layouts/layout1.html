@@ -17,4 +17,19 @@
     <div th:replace="~{fragments/footer::footer}"></div>
 
 </body>
+<!-- 사용자 스크립트 추가 -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const currentPath = window.location.pathname;
+        let links = document.querySelectorAll('.nav-link');
+        links.forEach(function (link) {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    });
+</script>
+
 </html>

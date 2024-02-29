@@ -78,16 +78,9 @@ public class ItemController {
             @RequestParam(value="itemImgFile", required = false) List<MultipartFile> itemImgFileList,
             Model model
     ){
-
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@ : "+itemRegisterRequest.toString());
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@ : "+bindingResult.toString());
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@ : "+itemImgFileList.get(0).isEmpty());
-
         if(bindingResult.hasErrors()){
             return "item/itemForm";
         }
-
-
         try {
             itemService.updateItem(itemRegisterRequest, itemImgFileList);
         } catch(Exception e){

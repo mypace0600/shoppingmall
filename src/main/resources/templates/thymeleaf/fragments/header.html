@@ -2,6 +2,7 @@
 <html xmlns:th="http://thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
+
 <div th:fragment="header">
     <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
         <div class="container-fluid">
@@ -14,7 +15,7 @@
                     <li class="nav-item"
                         sec:authorize="hasAnyAuthority('ROLE_ADMIN')"
                     >
-                        <a class="nav-link active" aria-current="page" href="/admin/item/register">상품등록</a>
+                        <a class="nav-link" aria-current="page" href="/admin/item/register">상품등록</a>
                     </li>
                     <li class="nav-item"
                         sec:authorize="hasAnyAuthority('ROLE_ADMIN')"
