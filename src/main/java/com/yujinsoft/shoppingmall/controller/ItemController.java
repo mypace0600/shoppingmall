@@ -90,7 +90,7 @@ public class ItemController {
         return "redirect:/";
     }
 
-    @GetMapping("/admin/items")
+    @GetMapping({"/admin/items", "/admin/items/{page}"})
     public String itemManage(ItemSearchRequest itemSearchRequest, Model model, @PageableDefault(size=3, sort="id", direction = Sort.Direction.DESC) Pageable pageable){
         Page<Item> items = itemService.getAdminItems(pageable);
         model.addAttribute("items",items);

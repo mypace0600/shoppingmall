@@ -17,54 +17,77 @@
 </th:block>
 
 <div layout:fragment="content">
-    <h1>상품 관리 페이지 입니다.</h1>
+    <h2>상품 관리 페이지 입니다.</h2>
+    <form action="#" th:action="@{'/admin/items/'+${items.number}}" role="form" method="get" th:object="${items}">
+        <div class="form-inline d-flex justify-content-center" th:object="${itemSearchRequest}">
+            <select th:field="*{searchDateType}" class="form-control" style="width:auto;">
+                <option value="all">전체기간</option>
+                <option value="1d">1일</option>
+                <option value="1w">1주</option>
+                <option value="1m">1개월</option>
+                <option value="6m">6개월</option>
+            </select>
+            <select th:field="*{searchSellStatus}" class="form-control" style="width: auto;">
+                <option value="">판매상태(전체)</option>
+                <option value="SELL">판매중</option>
+                <option value="SOLD_OUT">품절</option>
+            </select>
+            <select th:field="*{searchBy}" class="form-control" style="width: auto;">
+                <option value="itemNm">상품명</option>
+                <option value="createdBy">등록자</option>
+            </select>
+            <input th:field="*{searchQuery}" type="text" class="form-control" placeholder="검색어를 입력해주세요."/>
+            <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>상품아이디</td>
+                    <td>상품명</td>
+                    <td>상태</td>
+                    <td>등록자</td>
+                    <td>등록일</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${items.isEmpty()}">
+                    <td colspan="5">등록된 상품이 없습니다.</td>
+                </tr>
+                <tr th:unless="${items.isEmpty()}"
+                    th:each="item, status:${items.getContent()}">
+                    <td th:text="${item.id}"></td>
+                    <td><a th:href="@{'/admin/item/' + ${item.id}}" th:text="${item.itemNm}"></a></td>
+                    <td th:text="${item.itemSellStatus == T(com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>
+                    <td th:text="${item.createdBy}"></td>
+                    <td th:text="${item.regTime}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <ul th:unless="${items.isEmpty()}"
+            class="pagination" th:with="
+            pageNumber = ${items.pageable.pageNumber},
+            pageSize = ${items.pageable.pageSize},
+            totalPages = ${items.totalPages},
+            startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+            tempEndPage = ${startPage + pageSize - 1},
+            endPage = ${tempEndPage < totalPages ? tempEndPage : totalPages}
+        ">
+            <li th:classappend="${pageNumber == 0}? 'disabled'" class="page-item">
+                <a class="page-link" th:href="${pageNumber == 0} ? '#' : @{/(page=${pageNumber-1})}">
+                    <span aria-hidden="true">&lt;</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber+1} ? 'active'" class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{/(page=${page-1})}"></a>
+            </li>
+            <li th:classappend="${pageNumber == endPage} ? 'disabled'" class="page-item">
+                <a class="page-link" th:href="${pageNumber == endPage} ? '#' : @{/page=${pageNumber+1}}" aria-label="Next">
+                    <span aria-hidden="true">&gt;</span>
+                </a>
+            </li>
+        </ul>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <td>상품아이디</td>
-                <td>상품명</td>
-                <td>상태</td>
-                <td>등록자</td>
-                <td>등록일</td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:if="${items.isEmpty()}">
-                <td colspan="5">등록된 상품이 없습니다.</td>
-            </tr>
-            <tr th:unless="${items.isEmpty()}"
-                th:each="item, status:${items.getContent()}">
-                <td th:text="${item.id}"></td>
-                <td><a th:href="@{'/admin/item/' + ${item.id}}" th:text="${item.itemNm}"></a></td>
-                <td th:text="${item.itemSellStatus == T(com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>
-                <td th:text="${item.createdBy}"></td>
-                <td th:text="${item.regTime}"></td>
-            </tr>
-        </tbody>
-    </table>
-    <ul th:unless="${items.isEmpty()}"
-        class="pagination" th:with="
-        pageNumber = ${items.pageable.pageNumber},
-        pageSize = ${items.pageable.pageSize},
-        totalPages = ${items.totalPages},
-        startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
-        tempEndPage = ${startPage + pageSize - 1},
-        endPage = ${tempEndPage < totalPages ? tempEndPage : totalPages}
-    ">
-        <li th:classappend="${pageNumber == 0}? 'disabled'" class="page-item">
-            <a class="page-link" th:href="${pageNumber == 0} ? '#' : @{/(page=${pageNumber-1})}">
-                <span aria-hidden="true">&lt;</span>
-            </a>
-        </li>
-        <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber+1} ? 'active'" class="page-item">
-            <a th:text="${page}" class="page-link" th:href="@{/(page=${page-1})}"></a>
-        </li>
-        <li th:classappend="${pageNumber == endPage} ? 'disabled'" class="page-item">
-            <a class="page-link" th:href="${pageNumber == endPage} ? '#' : @{/page=${pageNumber+1}}" aria-label="Next">
-                <span aria-hidden="true">&gt;</span>
-            </a>
-        </li>
-    </ul>
+
+    </form>
 </div>
 </html>
