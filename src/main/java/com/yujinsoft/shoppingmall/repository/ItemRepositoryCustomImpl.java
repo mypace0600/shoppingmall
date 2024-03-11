@@ -2,6 +2,7 @@ package com.yujinsoft.shoppingmall.repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yujinsoft.shoppingmall.contract.ItemSearchRequest;
@@ -67,7 +68,13 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-        long total = results.size();
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(QItem.item)
+                .where(regDtsAfter(itemSearchRequest.getSearchDateType()),
+                        searchSellStatusEq(itemSearchRequest.getSearchSellStatus()),
+                        searchByLike(itemSearchRequest.getSearchBy(), itemSearchRequest.getSearchQuery()))
+                .fetchOne();
         return new PageImpl<>(results,pageable,total);
     }
 }

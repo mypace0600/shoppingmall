@@ -99,6 +99,7 @@ public class ItemController {
         model.addAttribute("items",items);
         model.addAttribute("itemSearchRequest",itemSearchRequest);
         model.addAttribute("maxPage",5);
+
         return "item/itemManage";
     }
 
