@@ -12,8 +12,34 @@
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        $(document).ready(function(){
+            $("#searchBtn").on("click",function(e){
+                e.preventDefault();
+                page(0);
+            });
+        });
 
+        function page(page){
+            let searchDateType = $("#searchDateType").val();
+            let searchSellStatus = $("#searchSellStatus").val();
+            let searchBy = $("#searchBy").val();
+            let searchQuery = $("#searchQuery").val();
+
+            location.href="/admin/items"+page+
+                "?searchDateType="+searchDateType+
+                "&searchSellStatus="+searchSellStatus+
+                "&searchBy="+searchBy+
+                "&searchQuery="+searchQuery;
+        }
     </script>
+</th:block>
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        select {
+            margin-right:10px;
+        }
+    </style>
 </th:block>
 
 <div layout:fragment="content">
@@ -86,8 +112,6 @@
                 </a>
             </li>
         </ul>
-
-
     </form>
 </div>
 </html>

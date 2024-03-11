@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -91,9 +93,12 @@ public class ItemController {
     }
 
     @GetMapping({"/admin/items", "/admin/items/{page}"})
-    public String itemManage(ItemSearchRequest itemSearchRequest, Model model, @PageableDefault(size=3, sort="id", direction = Sort.Direction.DESC) Pageable pageable){
-        Page<Item> items = itemService.getAdminItems(pageable);
+    public String itemManage(ItemSearchRequest itemSearchRequest, Model model, @PathVariable(value = "page",required = false) Optional<Integer> page){
+        Pageable pageable = PageRequest.of(page.isPresent()?page.get():0,3);
+        Page<Item> items = itemService.getAdminItems(itemSearchRequest,pageable);
         model.addAttribute("items",items);
+        model.addAttribute("itemSearchRequest",itemSearchRequest);
+        model.addAttribute("maxPage",5);
         return "item/itemManage";
     }
 

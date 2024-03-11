@@ -2,9 +2,9 @@ package com.yujinsoft.shoppingmall.service;
 
 import com.yujinsoft.shoppingmall.contract.ItemImgRequest;
 import com.yujinsoft.shoppingmall.contract.ItemRegisterRequest;
+import com.yujinsoft.shoppingmall.contract.ItemSearchRequest;
 import com.yujinsoft.shoppingmall.entity.Item;
 import com.yujinsoft.shoppingmall.entity.ItemImg;
-import com.yujinsoft.shoppingmall.repository.ItemImgRepository;
 import com.yujinsoft.shoppingmall.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +77,7 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Item> getAdminItems(Pageable pageable) {
-        return itemRepository.findAll(pageable);
+    public Page<Item> getAdminItems(ItemSearchRequest itemSearchRequest, Pageable pageable) {
+        return itemRepository.getAdminItemPage(itemSearchRequest,pageable);
     }
 }
