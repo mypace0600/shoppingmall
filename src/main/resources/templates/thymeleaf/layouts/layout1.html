@@ -30,6 +30,19 @@
             }
         });
     });
+
+    function page(page){
+        let searchDateType = $("#searchDateType").val();
+        let searchSellStatus = $("#searchSellStatus").val();
+        let searchBy = $("#searchBy").val();
+        let searchQuery = $("#searchQuery").val();
+
+        location.href="/admin/items/"+page+
+            "?searchDateType="+searchDateType+
+            "&searchSellStatus="+searchSellStatus+
+            "&searchBy="+searchBy+
+            "&searchQuery="+searchQuery;
+    }
 </script>
 
 </html>

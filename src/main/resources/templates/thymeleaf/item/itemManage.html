@@ -6,7 +6,11 @@
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
-
+    <style>
+        select {
+            margin-right:10px;
+        }
+    </style>
 </th:block>
 
 <!-- 사용자 스크립트 추가 -->
@@ -25,21 +29,13 @@
             let searchBy = $("#searchBy").val();
             let searchQuery = $("#searchQuery").val();
 
-            location.href="/admin/items"+page+
+            location.href="/admin/items/"+page+
                 "?searchDateType="+searchDateType+
                 "&searchSellStatus="+searchSellStatus+
                 "&searchBy="+searchBy+
                 "&searchQuery="+searchQuery;
         }
     </script>
-</th:block>
-<!-- 사용자 CSS 추가 -->
-<th:block layout:fragment="css">
-    <style>
-        select {
-            margin-right:10px;
-        }
-    </style>
 </th:block>
 
 <div layout:fragment="content">
@@ -81,7 +77,7 @@
                 </tr>
                 <tr th:unless="${items.isEmpty()}"
                     th:each="item, status:${items.getContent()}">
-                    <td th:text="${status.size - status.count+1}"></td>
+                    <td th:text="${item.id}"></td>
                     <td><a th:href="@{'/admin/item/' + ${item.id}}" th:text="${item.itemNm}"></a></td>
                     <td th:text="${item.itemSellStatus == T(com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>
                     <td th:text="${item.createdBy}"></td>
@@ -91,16 +87,18 @@
         </table>
         <div th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})" >
             <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${items.first}?'disabled':''">
-                    <a th:onclick="'javascript:page(' + ${items.number - 1} + ')'" aria-label='Previous' class="page-link">
+                <li class="page-item" th:classappend="${items.first}?'disabled'">
+                    <a th:onclick="page([[${items.number - 1}]]);" aria-label='Previous' class="page-link">
                         <span aria-hidden='true'>Previous</span>
                     </a>
                 </li>
+
                 <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page-1}?'active':''">
-                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+                    <a th:onclick="page([[${page - 1}]]);" th:inline="text" class="page-link">[[${page}]]</a>
                 </li>
-                <li class="page-item" th:classappend="${items.last}?'disabled':''">
-                    <a th:onclick="'javascript:page(' + ${items.number + 1} + ')'" aria-label='Next' class="page-link">
+
+                <li class="page-item" th:classappend="${items.last}?'disabled'">
+                    <a th:onclick="page([[${items.number + 1}]]);" aria-label='Next' class="page-link">
                         <span aria-hidden='true'>Next</span>
                     </a>
                 </li>
