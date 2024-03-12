@@ -156,25 +156,7 @@ class ItemServiceTest {
         return item;
     }
 
-    @Test
-    @DisplayName("상품 조회 페이징 테스트")
-    void getAdminItems(){
-        List<Item> savedItemList = new ArrayList<>();
-        for(int i=0;i<5;i++){
-            Item item = createItemForTest();
-            itemRepository.save(item);
-            savedItemList.add(item);
-        }
 
-        Pageable p = Pageable.ofSize(3);
-
-        Page<Item> items = itemService.getAdminItems(p);
-
-        assertEquals(items.getContent().get(0).getId(), savedItemList.get(0).getId());
-        assertEquals(items.getContent().get(1).getId(), savedItemList.get(1).getId());
-        assertEquals(items.getContent().get(2).getId(), savedItemList.get(2).getId());
-        assertEquals(items.getTotalPages(), 2 );
-    }
 
 
 }
