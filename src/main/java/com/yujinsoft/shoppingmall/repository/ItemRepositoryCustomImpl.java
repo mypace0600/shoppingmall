@@ -102,6 +102,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .from(itemImg)
                 .join(itemImg.item, item)
                 .where(itemImg.repImgYn.eq("Y"))
+                .where(item.itemSellStatus.eq(ItemSellStatus.SELL))
                 .where(itemNmLike(itemSearchRequest.getSearchQuery()))
                 .orderBy(item.id.desc())
                 .offset(pageable.getOffset())
