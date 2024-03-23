@@ -57,11 +57,11 @@ public class ItemController {
             model.addAttribute("errorMessage","상품 등록 중 오류가 발생했습니다.");
             return "item/itemForm";
         }
-        return "redirect:/";
+        return "redirect:/admin/items";
     }
 
     @GetMapping("/admin/item/{itemId}")
-    public String itemDetail(@PathVariable("itemId") Long itemId, Model model){
+    public String itemAdminDetail(@PathVariable("itemId") Long itemId, Model model){
         try{
             ItemRegisterRequest itemRegisterRequest = itemService.getItemDetail(itemId);
             model.addAttribute("itemRegisterRequest",itemRegisterRequest);
@@ -88,7 +88,7 @@ public class ItemController {
             model.addAttribute("errorMessage","상품 수정 중 오류가 발생했습니다.");
             return "item/itemForm";
         }
-        return "redirect:/";
+        return "redirect:/admin/items";
     }
 
     @GetMapping({"/admin/items", "/admin/items/{page}"})
@@ -114,6 +114,9 @@ public class ItemController {
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
         Page<MainItemRequest> items = itemService.getMainItemPage(itemSearchRequest,pageable);
         model.addAttribute("items",items);
+        if(null == itemSearchRequest.getSearchQuery()){
+            itemSearchRequest.setSearchQuery("");
+        }
         model.addAttribute("itemSearchRequest",itemSearchRequest);
         model.addAttribute("maxPage",5);
         return "main";

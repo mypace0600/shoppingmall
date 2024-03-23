@@ -41,7 +41,7 @@
         </div>
     </div>
     <input type="hidden"name="searchQuery" th:value="${itemSearchRequest.searchQuery}"/>
-    <div th:if="${not #strings.isEmpty(itemSearchRequest.searchQuery)}" class="center">
+    <div th:if="${not #strings.isEmpty(itemSearchRequest.searchQuery) }" class="center">
         <p class="h3 font-weight-bold" th:text="${itemSearchRequest.searchQuery}+'검색 결과'"></p>
     </div>
     <div class="row">
@@ -72,11 +72,11 @@
             </li>
             <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}" th:classappend="${items.number eq page-1} ? 'active' : ''">
                 <a th:href="@{'/'+ '?searchQuery=' + ${itemSearchRequest.searchQuery}
-                    + '&page=' + ${items.number-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+                    + '&page=' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
             </li>
             <li class="page-item" th:classappend="${items.number+1 ge items.totalPages}?'disabled':''">
                 <a th:href="@{'/'+ '?searchQuery=' + ${itemSearchRequest.searchQuery}
-                    + '&page=' + ${items.number-1}}" saria-label="Next" class="page-link">
+                    + '&page=' + ${items.number+1}}" saria-label="Next" class="page-link">
                     <span aria-hidden="true">Next</span>
                 </a>
             </li>

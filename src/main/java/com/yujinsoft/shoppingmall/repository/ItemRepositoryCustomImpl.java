@@ -2,6 +2,7 @@ package com.yujinsoft.shoppingmall.repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -81,14 +82,21 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return new PageImpl<>(results,pageable,total);
     }
 
-    private BooleanExpression itemNmLike(String searchQuery){
-        return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%"+searchQuery+"%");
+    private BooleanExpression itemNmLike(String searchQuery) {
+        if (StringUtils.isEmpty(searchQuery)||searchQuery.equals("null")) {
+            System.out.println("@@@@@@@@ searchQuery : "+searchQuery);
+            return Expressions.asBoolean(true).isTrue();
+        } else {
+            return QItem.item.itemNm.like("%" + searchQuery + "%");
+        }
     }
+
 
     @Override
     public Page<MainItemRequest> getMainItemPage(ItemSearchRequest itemSearchRequest, Pageable pageable){
         QItem item = QItem.item;
         QItemImg itemImg = QItemImg.itemImg;
+
 
         List<MainItemRequest> results = queryFactory
                 .select(
@@ -110,7 +118,12 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .fetch();
 
 
-        long total = results.size();
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(QItem.item)
+                .where(QItem.item.itemSellStatus.eq(ItemSellStatus.SELL))
+                .where(itemNmLike(itemSearchRequest.getSearchQuery()))
+                .fetchOne();
         return new PageImpl<>(results,pageable,total);
     }
 }
