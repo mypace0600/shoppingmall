@@ -2,6 +2,7 @@ package com.yujinsoft.shoppingmall.controller;
 
 import com.yujinsoft.shoppingmall.contract.ItemRegisterRequest;
 import com.yujinsoft.shoppingmall.contract.ItemSearchRequest;
+import com.yujinsoft.shoppingmall.contract.MainItemRequest;
 import com.yujinsoft.shoppingmall.entity.Item;
 import com.yujinsoft.shoppingmall.service.ItemService;
 
@@ -106,6 +107,16 @@ public class ItemController {
         ItemRegisterRequest item = itemService.getItemDetail(itemId);
         model.addAttribute("item", item);
         return "item/itemDetail";
+    }
+
+    @GetMapping(value="/")
+    public String main(ItemSearchRequest itemSearchRequest, Optional<Integer> page, Model model){
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+        Page<MainItemRequest> items = itemService.getMainItemPage(itemSearchRequest,pageable);
+        model.addAttribute("items",items);
+        model.addAttribute("itemSearchRequest",itemSearchRequest);
+        model.addAttribute("maxPage",5);
+        return "main";
     }
 
 }

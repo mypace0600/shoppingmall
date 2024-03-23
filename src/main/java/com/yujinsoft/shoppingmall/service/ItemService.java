@@ -3,6 +3,7 @@ package com.yujinsoft.shoppingmall.service;
 import com.yujinsoft.shoppingmall.contract.ItemImgRequest;
 import com.yujinsoft.shoppingmall.contract.ItemRegisterRequest;
 import com.yujinsoft.shoppingmall.contract.ItemSearchRequest;
+import com.yujinsoft.shoppingmall.contract.MainItemRequest;
 import com.yujinsoft.shoppingmall.entity.Item;
 import com.yujinsoft.shoppingmall.entity.ItemImg;
 import com.yujinsoft.shoppingmall.repository.ItemRepository;
@@ -79,5 +80,10 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<Item> getAdminItems(ItemSearchRequest itemSearchRequest, Pageable pageable) {
         return itemRepository.getAdminItemPage(itemSearchRequest,pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainItemRequest> getMainItemPage(ItemSearchRequest itemSearchRequest, Pageable pageable){
+        return itemRepository.getMainItemPage(itemSearchRequest,pageable);
     }
 }

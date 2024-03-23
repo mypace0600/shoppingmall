@@ -6,8 +6,11 @@ import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yujinsoft.shoppingmall.contract.ItemSearchRequest;
+import com.yujinsoft.shoppingmall.contract.MainItemRequest;
+import com.yujinsoft.shoppingmall.contract.QMainItemRequest;
 import com.yujinsoft.shoppingmall.entity.Item;
 import com.yujinsoft.shoppingmall.entity.QItem;
+import com.yujinsoft.shoppingmall.entity.QItemImg;
 import com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
@@ -75,6 +78,38 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                         searchSellStatusEq(itemSearchRequest.getSearchSellStatus()),
                         searchByLike(itemSearchRequest.getSearchBy(), itemSearchRequest.getSearchQuery()))
                 .fetchOne();
+        return new PageImpl<>(results,pageable,total);
+    }
+
+    private BooleanExpression itemNmLike(String searchQuery){
+        return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%"+searchQuery+"%");
+    }
+
+    @Override
+    public Page<MainItemRequest> getMainItemPage(ItemSearchRequest itemSearchRequest, Pageable pageable){
+        QItem item = QItem.item;
+        QItemImg itemImg = QItemImg.itemImg;
+
+        List<MainItemRequest> results = queryFactory
+                .select(
+                        new QMainItemRequest(
+                        item.id,
+                        item.itemNm,
+                        item.itemDetail,
+                        itemImg.imgUrl,
+                        item.price)
+                )
+                .from(itemImg)
+                .join(itemImg.item, item)
+                .where(itemImg.repImgYn.eq("Y"))
+                .where(itemNmLike(itemSearchRequest.getSearchQuery()))
+                .orderBy(item.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+        long total = results.size();
         return new PageImpl<>(results,pageable,total);
     }
 }
