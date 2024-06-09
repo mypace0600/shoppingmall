@@ -62,4 +62,14 @@ public class CartController {
         cartService.updateCartItemCount(cartItemId,count);
         return new ResponseEntity<Long>(cartItemId,HttpStatus.OK);
     }
+
+    @DeleteMapping("/cartItem/{cartItemId}")
+    @ResponseBody
+    public ResponseEntity deleteCartItem(@PathVariable("cartItemId")Long cartItemId, PrincipalDetail principal){
+        if(!cartService.validateCartItem(cartItemId,principal.getUser().getEmail())){
+            return new ResponseEntity<String>("수정 권한이 없습니다.",HttpStatus.FORBIDDEN);
+        }
+        cartService.deleteCartItem(cartItemId);
+        return new ResponseEntity<Long>(cartItemId,HttpStatus.OK);
+    }
 }
