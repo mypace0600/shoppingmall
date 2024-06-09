@@ -1,6 +1,7 @@
 package com.yujinsoft.shoppingmall.controller;
 
 import com.yujinsoft.shoppingmall.config.PrincipalDetail;
+import com.yujinsoft.shoppingmall.contract.CartDetailDto;
 import com.yujinsoft.shoppingmall.entity.CartItemDto;
 import com.yujinsoft.shoppingmall.service.CartService;
 import jakarta.validation.Valid;
@@ -8,11 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,5 +42,24 @@ public class CartController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+    }
+
+    @GetMapping("/cart")
+    public String orderHis(PrincipalDetail principal, Model model){
+        List<CartDetailDto> cartDetailDtoList = cartService.getCartList(principal.getUser().getEmail());
+        model.addAttribute("cartItems",cartDetailDtoList);
+        return "cart/cartList";
+    }
+
+    @PatchMapping("/cartItem/{cartItemId}")
+    @ResponseBody
+    public ResponseEntity updateCartItem(@PathVariable("cartItemId") Long cartItemId, int count, PrincipalDetail principal){
+        if(count<=0){
+            return new ResponseEntity<String>("최소 1개 이상 담아주세요",HttpStatus.BAD_REQUEST);
+        } else if(!cartService.validateCartItem(cartItemId,principal.getUser().getEmail())){
+            return new ResponseEntity<String>("수정 권한이 없습니다.",HttpStatus.FORBIDDEN);
+        }
+        cartService.updateCartItemCount(cartItemId,count);
+        return new ResponseEntity<Long>(cartItemId,HttpStatus.OK);
     }
 }
