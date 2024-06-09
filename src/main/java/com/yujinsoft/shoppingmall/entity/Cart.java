@@ -4,7 +4,8 @@ package com.yujinsoft.shoppingmall.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @Builder
 @ToString
 @NoArgsConstructor

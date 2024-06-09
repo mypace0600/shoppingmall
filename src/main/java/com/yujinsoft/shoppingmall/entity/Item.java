@@ -6,9 +6,9 @@ import com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

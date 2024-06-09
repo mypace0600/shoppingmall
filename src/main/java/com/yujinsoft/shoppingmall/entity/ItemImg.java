@@ -5,7 +5,8 @@ import lombok.*;
 
 
 @Table(name="item_img")
-@Data
+@Getter
+@Setter
 @Builder
 @ToString
 @NoArgsConstructor
