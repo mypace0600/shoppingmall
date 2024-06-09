@@ -2,19 +2,23 @@ package com.yujinsoft.shoppingmall.controller;
 
 import com.yujinsoft.shoppingmall.config.PrincipalDetail;
 import com.yujinsoft.shoppingmall.contract.OrderDto;
+import com.yujinsoft.shoppingmall.contract.OrderHisDto;
 import com.yujinsoft.shoppingmall.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,4 +47,15 @@ public class OrderController {
         }
         return new ResponseEntity<Long>(orderId,HttpStatus.OK);
     }
+
+    @GetMapping(value = {"/orders","/orders/{page}"})
+    public String orderHist(@PathVariable("page") Optional<Integer> page, PrincipalDetail principal, Model model){
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,4);
+        Page<OrderHisDto> orderHisList = orderService.getOrderList(principal.getUser().getEmail(),pageable);
+        model.addAttribute("orders",orderHisList);
+        model.addAttribute("page",pageable.getPageNumber());
+        model.addAttribute("maxPage",5);
+        return "order/orderHist";
+    }
+
 }
