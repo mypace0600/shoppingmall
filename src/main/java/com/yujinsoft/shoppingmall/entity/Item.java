@@ -1,5 +1,6 @@
 package com.yujinsoft.shoppingmall.entity;
 
+import com.yujinsoft.shoppingmall.common.OutOfStockException;
 import com.yujinsoft.shoppingmall.contract.ItemRegisterRequest;
 import com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus;
 import jakarta.persistence.*;
@@ -40,5 +41,13 @@ public class Item extends BaseEntity{
         this.itemDetail = itemRegisterRequest.getItemDetail();
         this.stockNumber = itemRegisterRequest.getStockNumber();
         this.itemSellStatus = itemRegisterRequest.getItemSellStatus();
+    }
+
+    public void removeStock(int stockNumber){
+        int restStock = this.stockNumber - stockNumber;
+        if(restStock<0){
+            throw new OutOfStockException("상품의 재고가 부족합니다. (현재 재고 수량 : "+this.stockNumber+")");
+        }
+        this.stockNumber = restStock;
     }
 }
