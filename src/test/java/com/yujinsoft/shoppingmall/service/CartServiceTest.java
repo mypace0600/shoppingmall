@@ -1,7 +1,7 @@
 package com.yujinsoft.shoppingmall.service;
 
 import com.yujinsoft.shoppingmall.entity.CartItem;
-import com.yujinsoft.shoppingmall.entity.CartItemDto;
+import com.yujinsoft.shoppingmall.contract.CartItemDto;
 import com.yujinsoft.shoppingmall.entity.Item;
 import com.yujinsoft.shoppingmall.entity.User;
 import com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus;

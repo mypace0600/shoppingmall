@@ -1,6 +1,9 @@
 package com.yujinsoft.shoppingmall.service;
 
 import com.yujinsoft.shoppingmall.contract.CartDetailDto;
+import com.yujinsoft.shoppingmall.contract.CartItemDto;
+import com.yujinsoft.shoppingmall.contract.CartOrderDto;
+import com.yujinsoft.shoppingmall.contract.OrderDto;
 import com.yujinsoft.shoppingmall.entity.*;
 import com.yujinsoft.shoppingmall.repository.CartItemRepository;
 import com.yujinsoft.shoppingmall.repository.CartRepository;
@@ -22,6 +25,7 @@ public class CartService {
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final OrderService orderService;
 
     public Long addCart(CartItemDto cartItemDto, String email){
         Item item = itemRepository.findById(cartItemDto.getItemId()).orElseThrow(EntityNotFoundException::new);
@@ -77,4 +81,23 @@ public class CartService {
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
         cartItemRepository.delete(cartItem);
     }
+
+    public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String email){
+        List<OrderDto> orderDtoList = new ArrayList<>();
+        for(CartOrderDto cartOrderDto : cartOrderDtoList){
+            CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
+            OrderDto orderDto = new OrderDto();
+            orderDto.setItemId(cartItem.getItem().getId());
+            orderDto.setCount(cartItem.getCount());
+            orderDtoList.add(orderDto);
+        }
+        Long orderId = orderService.orders(orderDtoList,email);
+
+        for(CartOrderDto cartOrderDto : cartOrderDtoList){
+            CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
+            cartItemRepository.delete(cartItem);
+        }
+        return orderId;
+    }
+
 }

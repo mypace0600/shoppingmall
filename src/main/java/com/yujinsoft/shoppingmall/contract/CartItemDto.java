@@ -1,4 +1,4 @@
-package com.yujinsoft.shoppingmall.entity;
+package com.yujinsoft.shoppingmall.contract;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

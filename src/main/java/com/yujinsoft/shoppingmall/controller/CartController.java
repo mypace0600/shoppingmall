@@ -2,7 +2,8 @@ package com.yujinsoft.shoppingmall.controller;
 
 import com.yujinsoft.shoppingmall.config.PrincipalDetail;
 import com.yujinsoft.shoppingmall.contract.CartDetailDto;
-import com.yujinsoft.shoppingmall.entity.CartItemDto;
+import com.yujinsoft.shoppingmall.contract.CartItemDto;
+import com.yujinsoft.shoppingmall.contract.CartOrderDto;
 import com.yujinsoft.shoppingmall.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -71,5 +72,22 @@ public class CartController {
         }
         cartService.deleteCartItem(cartItemId);
         return new ResponseEntity<Long>(cartItemId,HttpStatus.OK);
+    }
+
+    @PostMapping("/cart/orders")
+    @ResponseBody
+    public ResponseEntity orderCartItem(@RequestBody CartOrderDto cartOrderDto, PrincipalDetail principal){
+        List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
+        if(cartOrderDtoList == null || cartOrderDtoList.size() == 0){
+            return new ResponseEntity<String>("주문할 상품을 선택해주세요",HttpStatus.FORBIDDEN);
+        }
+
+        for(CartOrderDto cartOrder : cartOrderDtoList){
+            if(!cartService.validateCartItem(cartOrder.getCartItemId(),principal.getUser().getEmail())){
+                return new ResponseEntity<String>("주문 권한이 없습니다.",HttpStatus.FORBIDDEN);
+            }
+        }
+        Long orderId = cartService.orderCartItem(cartOrderDtoList,principal.getUser().getEmail());
+        return new ResponseEntity<Long>(orderId,HttpStatus.OK);
     }
 }
