@@ -6,6 +6,7 @@ import com.yujinsoft.shoppingmall.entity.Order;
 import com.yujinsoft.shoppingmall.entity.OrderItem;
 import com.yujinsoft.shoppingmall.entity.User;
 import com.yujinsoft.shoppingmall.entity.enums.ItemSellStatus;
+import com.yujinsoft.shoppingmall.entity.enums.OrderStatus;
 import com.yujinsoft.shoppingmall.entity.enums.Role;
 import com.yujinsoft.shoppingmall.repository.ItemRepository;
 import com.yujinsoft.shoppingmall.repository.OrderRepository;
@@ -75,5 +76,23 @@ class OrderServiceTest {
         int totalPrice = orderDto.getCount()*item.getPrice();
 
         assertEquals(totalPrice,order.getTotalPrice());
+    }
+
+    @Test
+    @DisplayName("주문 취소 테스트")
+    public void cancelOrder(){
+        Item item = saveItem();
+        User user = saveUser();
+
+        OrderDto orderDto = new OrderDto();
+        orderDto.setCount(10);
+        orderDto.setItemId(item.getId());
+        Long orderId = orderService.order(orderDto,user.getEmail());
+
+        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+        orderService.cancelOrder(orderId);
+
+        assertEquals(OrderStatus.CANCEL, order.getOrderStatus());
+        assertEquals(100, item.getStockNumber());
     }
 }
